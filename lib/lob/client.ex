@@ -75,6 +75,17 @@ defmodule Lob.Client do
     |> handle_response
   end
 
+  @spec post_request_json(<<_::64, _::_*8>>, map) :: client_response
+  def post_request_json(url, body, headers \\ []) do
+    url
+    |> post(
+      Jason.encode!(body),
+      headers ++ [{"Content-Type", "application/json; charset=utf-8"}],
+      build_options()
+    )
+    |> handle_response
+  end
+
   @spec post_request_binary(<<_::64, _::_*8>>, binary(), [{binary(), binary()}]) ::
           client_response
   def post_request_binary(url, body, headers \\ []) do
@@ -98,6 +109,14 @@ defmodule Lob.Client do
   defp handle_response({:ok, %{body: body, headers: headers, status_code: code}})
        when code >= 200 and code < 300 do
     {:ok, body, headers}
+  end
+
+  defp handle_response({:ok, %{body: %{error: %{message: message, status_code: status_code}}}}) do
+    {:error, %{message: Error.message(%Error{reason: message, id: status_code})}}
+  end
+
+  defp handle_response({:ok, %{body: body, status_code: status_code}}) do
+    {:error, %{message: Error.message(%Error{reason: body.message, id: status_code})}}
   end
 
   defp handle_response({:ok, %{body: body}}) do

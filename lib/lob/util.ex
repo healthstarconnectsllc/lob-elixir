@@ -27,7 +27,8 @@ defmodule Lob.Util do
   """
   @spec build_body(map) :: {:multipart, list}
   def build_body(body) when is_map(body) do
-    result = {:multipart, Enum.reduce(body, [], &(&2 ++ transform_argument(&1)))}
+    result =
+      {:multipart, Enum.reduce(body, [], &(&2 ++ transform_argument(&1))) |> List.flatten()}
     result
   end
 
@@ -67,7 +68,15 @@ defmodule Lob.Util do
 
   defp transform_argument({k, v}) when is_map(v) do
     Enum.map(v, fn {sub_k, sub_v} ->
-      {"#{to_string(k)}[#{to_string(sub_k)}]", to_string(sub_v)}
+      if is_list(sub_v) do
+        sub_v
+        |> Enum.with_index(0)
+        |> Enum.map(fn {e, i} ->
+          {"#{k}[#{to_string(sub_k)}][#{i}]", to_string(e)}
+        end)
+      else
+        {"#{to_string(k)}[#{to_string(sub_k)}]", to_string(sub_v)}
+      end
     end)
   end
 

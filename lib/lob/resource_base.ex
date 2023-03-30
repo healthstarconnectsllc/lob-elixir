@@ -47,14 +47,37 @@ defmodule Lob.ResourceBase do
       end
 
       if :create in unquote(methods) do
-        @spec create(map, map) :: Client.client_response()
-        def create(data, headers \\ %{}) do
-          Client.post_request(base_url(), Util.build_body(data), Util.build_headers(headers))
+        @spec create(map, map, boolean) :: Client.client_response()
+        def create(data, headers \\ %{}, json \\ false) do
+          if json == true do
+            Client.post_request_json(base_url(), data, Util.build_headers(headers))
+          else
+            Client.post_request(base_url(), Util.build_body(data), Util.build_headers(headers))
+          end
         end
 
-        @spec create!(map, map) :: {map, list} | no_return
-        def create!(data, headers \\ %{}) do
-          case create(data, headers) do
+        @spec create!(map, map, boolean) :: {map, list} | no_return
+        def create!(data, headers \\ %{}, json \\ false) do
+          case create(data, headers, json) do
+            {:ok, body, headers} -> {body, headers}
+            {:error, error} -> raise to_string(error)
+          end
+        end
+      end
+
+      if :upload_file in unquote(methods) do
+        @spec upload_file(String.t(), map, map) :: Client.client_response()
+        def upload_file(id, data, headers \\ %{}) do
+          Client.post_request(
+            resource_url(id),
+            Util.build_body(data),
+            Util.build_headers(headers)
+          )
+        end
+
+        @spec upload_file!(String.t(), map, map) :: {map, list} | no_return
+        def upload_file!(id, data, headers \\ %{}) do
+          case upload_file(id, data, headers) do
             {:ok, body, headers} -> {body, headers}
             {:error, error} -> raise to_string(error)
           end
