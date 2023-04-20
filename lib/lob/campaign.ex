@@ -5,5 +5,8 @@ defmodule Lob.Campaign do
 
   use Lob.ResourceBase,
     endpoint: "campaigns",
-    methods: [:list, :create, :retrieve, :update, :delete, :send_campaign]
+    methods: [:list, :create, :retrieve, :update, :delete,
+    # endpoints available but functions not currently built out
+    # :send_campaign
+  ]
 end

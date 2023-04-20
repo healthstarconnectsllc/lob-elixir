@@ -12,7 +12,8 @@ defmodule Lob.Upload do
       :update,
       :delete,
       :upload_file,
-      :create_export,
-      :retrieve_export
+      # endpoints available but functions not currently built out
+      # :create_export,
+      # :retrieve_export
     ]
 end
