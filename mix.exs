@@ -52,7 +52,8 @@ defmodule Lob.Mixfile do
       {:poison, "~> 5.0"},
       {:pre_commit, "~> 0.3.4", only: :dev},
       {:plug_cowboy, "~> 2.5"},
-      {:uuid, "~> 1.1", only: :test}
+      {:uuid, "~> 1.1", only: :test},
+      {:xema, "~> 0.17.0"}
     ]
   end
 
