@@ -75,6 +75,17 @@ defmodule Lob.Client do
     |> handle_response
   end
 
+  @spec post_request_json(<<_::64, _::_*8>>, map) :: client_response
+  def post_request_json(url, body, headers \\ []) do
+    url
+    |> post(
+      Jason.encode!(body),
+      headers ++ [{"Content-Type", "application/json; charset=utf-8"}],
+      build_options()
+    )
+    |> handle_response
+  end
+
   @spec post_request_binary(<<_::64, _::_*8>>, binary(), [{binary(), binary()}]) ::
           client_response
   def post_request_binary(url, body, headers \\ []) do
