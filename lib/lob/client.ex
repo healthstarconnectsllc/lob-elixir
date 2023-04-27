@@ -111,6 +111,14 @@ defmodule Lob.Client do
     {:ok, body, headers}
   end
 
+  defp handle_response({:ok, %{body: %{error: %{message: message, status_code: status_code}}}}) do
+    {:error, %{message: Error.message(%Error{reason: message, id: status_code})}}
+  end
+
+  defp handle_response({:ok, %{body: body, status_code: status_code}}) do
+    {:error, %{message: Error.message(%Error{reason: body.message, id: status_code})}}
+  end
+
   defp handle_response({:ok, %{body: body}}) do
     {:error, body.error}
   end
