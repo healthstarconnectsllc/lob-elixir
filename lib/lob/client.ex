@@ -79,7 +79,7 @@ defmodule Lob.Client do
   def post_request_json(url, body, headers \\ []) do
     url
     |> post(
-      Jason.encode!(body),
+      JSON.encode!(body),
       headers ++ [{"Content-Type", "application/json; charset=utf-8"}],
       build_options()
     )

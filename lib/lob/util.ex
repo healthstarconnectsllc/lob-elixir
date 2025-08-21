@@ -63,7 +63,7 @@ defmodule Lob.Util do
   # For context on the format of the struct see:
   # https://github.com/benoitc/hackney/issues/292
   defp transform_argument({k, %{local_path: file_path}}) do
-    [{:file, file_path, {"form-data", [name: to_string(k), filename: file_path]}, []}]
+    [{:file, file_path, {"form-data", [name: to_string(k), filename: Path.basename(file_path)]}, []}]
   end
 
   defp transform_argument({k, v}) when is_map(v) do
