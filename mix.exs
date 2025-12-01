@@ -46,7 +46,7 @@ defmodule Lob.Mixfile do
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.14", only: :test},
-      {:httpoison, "~> 1.8"},
+      {:httpoison, "~> 2.2.0"},
       {:poison, "~> 5.0"},
       {:pre_commit, "~> 0.3.4", only: :dev},
       {:plug_cowboy, "~> 2.5"},
